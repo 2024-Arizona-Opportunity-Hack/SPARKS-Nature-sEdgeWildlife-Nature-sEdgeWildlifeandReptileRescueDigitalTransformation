@@ -1,44 +1,53 @@
-import React from 'react';
-import DynamicForm from '../components/DynamicForm';
+import React, { useState, useEffect } from 'react';
+import AnimalList from '../components/AnimalList';
+import AdoptionFormPopup from '../components/AdoptionFormPopup';
+import axios from 'axios';
+import dummyAnimals from './DummyAnimals'
 
 const AdoptionPage = () => {
-  const adoptionFormFields = [
-    { name: 'fullName', label: 'Full Name', type: 'text', required: true },
-    { name: 'email', label: 'Email', type: 'email', required: true },
-    { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
-    { name: 'animalType', label: 'Animal Type', type: 'select', required: true, options: ['Dog', 'Cat', 'Other'] },
-    { name: 'reason', label: 'Reason for Adoption', type: 'textarea', required: true },
-  ];
+  const [animals, setAnimals] = useState([]);
+  const [selectedAnimal, setSelectedAnimal] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleSubmit = async (formData) => {
-    try {
-      const response = await fetch('/api/submit-adoption-form', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        alert('Adoption form submitted successfully!');
-      } else {
-        alert('Failed to submit form. Please try again.');
+  /* useEffect(() => {
+    // Fetch animals from your backend
+    const fetchAnimals = async () => {
+      try {
+        const response = await axios.get('/api/animals');
+        setAnimals(response.data);
+      } catch (error) {
+        console.error('Error fetching animals:', error);
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred. Please try again.');
-    }
+    };
+
+    fetchAnimals();
+  }, []); */
+  useEffect(() => {
+    setAnimals(dummyAnimals)
+  })
+
+  const handleAdopt = (animal) => {
+    setSelectedAnimal(animal);
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedAnimal(null);
   };
 
   return (
-    <div className="adoption-page">
-      <h1>Adopt a Pet</h1>
-      <p>Thank you for considering adoption! Please fill out the form below to begin the adoption process.</p>
-      <DynamicForm
-        formFields={adoptionFormFields}
-        onSubmit={handleSubmit}
-        formTitle="Animal Adoption Application"
-      />
+    <div className="adoptionPage">
+      <h1>Rescue Animals for Adoption</h1>
+      <AnimalList animals={animals} onAdopt={handleAdopt} />
+      {selectedAnimal && (
+        <AdoptionFormPopup
+          isOpen={isPopupOpen}
+          onClose={closePopup}
+          animal={selectedAnimal}
+          formId="adoption-form-id" // Replace with your actual form ID
+        />
+      )}
     </div>
   );
 };
