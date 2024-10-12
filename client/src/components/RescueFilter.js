@@ -12,10 +12,6 @@ const RescueFilter = ({ animals, onFilterChange }) => {
   const ageRanges = ['0-2 years', '3-5 years', '6+ years'];
 
   useEffect(() => {
-    onFilterChange({ species, breed, age });
-  }, [species, breed, age, onFilterChange]);
-
-  useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -27,6 +23,10 @@ const RescueFilter = ({ animals, onFilterChange }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    onFilterChange({ species, breed, age });
+  }, [species, breed, age, onFilterChange]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 

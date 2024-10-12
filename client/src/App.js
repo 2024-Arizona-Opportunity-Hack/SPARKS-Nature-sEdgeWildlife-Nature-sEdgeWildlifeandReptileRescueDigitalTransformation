@@ -6,6 +6,7 @@ import {
 import AdoptionPage from './pages/AdoptionPage'
 import IntakePage from './pages/IntakePage';
 import HomePage from './pages/HomePage';
+import Login from './components/Login';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/intake",
     element: <IntakePage />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 

@@ -91,7 +91,7 @@ const AdoptionPage = () => {
     <div className="adoptionPage">
       <h1>Rescue Animals for Adoption</h1>
       <RescueFilter animals={animals} onFilterChange={handleFilterChange} />
-      <AnimalList animals={animals} onAdopt={handleAdopt} />
+      <AnimalList animals={filteredAnimals} onAdopt={handleAdopt} />
       {selectedAnimal && (
         <AdoptionFormPopup
           isOpen={isPopupOpen}
