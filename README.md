@@ -14,7 +14,7 @@ Nature's Edge Wildlife and Reptile Rescue (NEWRR) faces challenges due to manual
 ## Project Overview
 Our project offers a comprehensive cloud-based solution specifically designed for Nature’s Edge Wildlife and Reptile Rescue. It replaces the current manual processes with digital tools, streamlining the management of donations, automating the creation of personalized thank-you cards, and efficiently handling animal intake and adoption forms. This integrated platform enhances operational efficiency, allowing Nature’s Edge to focus more on wildlife rescue and rehabilitation while improving donor engagement and ensuring seamless compatibility with existing tools.
 
-- [DevPost Projects](https://devpost.com/submit-to/22174-opportunity-hack-2024-october-asu-tempe-arizona-ohack-dev/manage/submissions)
+- [DevPost Projects]([https://devpost.com/submit-to/22174-opportunity-hack-2024-october-asu-tempe-arizona-ohack-dev/manage/submissions](https://devpost.com/software/sparks-c4t8xo))
 - [YouTube Pitch](https://www.youtube.com)
 
 ## Tech Stack
