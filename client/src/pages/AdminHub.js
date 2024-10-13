@@ -1,6 +1,7 @@
 import { Link, Outlet } from 'react-router-dom';
 import '../Admin.css'
 
+
 const AdminHub = () => {
   return (
     <div className="admin-hub-container">
