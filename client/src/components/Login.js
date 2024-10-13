@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../Login.css'
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,7 +22,7 @@ const Login = ({ setIsAuthenticated }) => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('adminToken', data.token);
-        setIsAuthenticated(true);
+        login(data)
         navigate('/admin');
       } else {
         setError('Invalid username or password');
@@ -37,7 +40,6 @@ const Login = ({ setIsAuthenticated }) => {
       className="login-image"
       style={{ backgroundImage: "url(https://i0.wp.com/www.australiangeographic.com.au/wp-content/uploads/2017/09/Trimeresurus-insularis-shutterstock-scaled.jpg?fit=2560%2C1707&ssl=1)" }} // Replace with your image URL
     ></div>
-
     {/* Left side for the login form */}
     <div className="login-form">
       <h2>Login</h2>
