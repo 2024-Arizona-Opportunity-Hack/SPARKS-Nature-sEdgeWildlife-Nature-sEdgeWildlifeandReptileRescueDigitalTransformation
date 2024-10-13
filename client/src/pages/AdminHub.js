@@ -9,8 +9,9 @@ const AdminHub = () => {
         <h1>Admin Hub</h1>
         <nav>
           <ul>
-            <li><Link to="/admin/intake">Manage Intake</Link></li>
-            <li><Link to="/admin/adoption">Manage Adoption</Link></li>
+            <li><Link to="/admin/dashboard">Dashboard</Link></li>
+            <li><Link to="/admin/intake">View Current Intake</Link></li>
+            <li><Link to="/admin/adoption">Manage Adoption Listings</Link></li>
             <li><Link to="/admin/Donations">Manage Donations</Link></li>
           </ul>
         </nav>

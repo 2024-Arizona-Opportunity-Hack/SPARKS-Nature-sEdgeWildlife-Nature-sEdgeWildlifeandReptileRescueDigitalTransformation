@@ -44,7 +44,7 @@ const IntakeManagement = () => {
   <div className="intake-toolbar">
     <input
       type="text"
-      placeholder="Search records..."
+      placeholder="🔍Search records..."
       onChange={(e) => setSearchTerm(e.target.value)}
     />
     <select onChange={(e) => setFilter(e.target.value)}>
@@ -76,8 +76,8 @@ const IntakeManagement = () => {
                 <td>{record.gender}</td>
                 <td>
                   <div className="action-buttons">
-                    <button className="share-btn">Share</button>
-                    <button className="download-btn">Download</button>
+                    <button className="share-btn">📤Share</button>
+                    <button className="download-btn">📥Download</button>
                   </div>
                 </td>
               </tr>
