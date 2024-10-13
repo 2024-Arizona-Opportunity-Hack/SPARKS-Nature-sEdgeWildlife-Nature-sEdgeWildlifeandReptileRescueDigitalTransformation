@@ -11,6 +11,9 @@ import AdminHub from './pages/AdminHub';
 import IntakeManagement from './components/IntakeManagement';
 import FormGenerator from './components/FormGenerator';
 import ProtectedRoute from './ProtectedRoute';
+import Dashboard from './components/Dashboard';
+import AdoptionRequests from './components/AdoptionRequests';
+import UserManagement from './components/UserManagement';
 
 const router = createBrowserRouter([
   {
@@ -53,6 +56,37 @@ const router = createBrowserRouter([
             <FormGenerator />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/admin/dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      }, {
+        path: "/admin/new-intake",
+        element: (
+          <ProtectedRoute>
+            <IntakePage />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "/admin/adopt-req",
+        element: (
+          <ProtectedRoute>
+            <AdoptionRequests />
+          </ProtectedRoute>
+        )
+      }, 
+      {
+        path: "/admin/users",
+        element: (
+          <ProtectedRoute>
+            <UserManagement />
+          </ProtectedRoute>
+        )
       }
     ]
   },

@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from controller import adoptionController
 from controller import intakeController
 from controller import loginController
+from controller import employeeController
 
 app = FastAPI()
 
@@ -11,6 +12,7 @@ app.include_router(adoptionController.router)
 
 app.include_router(loginController.router)
 app.include_router(intakeController.router)
+app.include_router(employeeController.router)
 
 # Configure CORS
 app.add_middleware(

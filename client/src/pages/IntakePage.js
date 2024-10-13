@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DynamicForm from '../components/DynamicForm';
-// import '../Intake.css';
+import '../IntakeForm.css'
+import {useNavigate, useLocation} from 'react-router-dom'
 
 const IntakePage = () => {
   const [formErrors, setFormErrors] = useState({});
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate()
+  const [existingData, setExistingData] = useState(null);
+  const location = useLocation()
 
   const adoptionFormFields = [
     { 
@@ -69,6 +74,19 @@ const IntakePage = () => {
     { name: 'adoption_status', label: 'Adoption Status', type: 'checkbox', required: false },
   ];
 
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage(null);
+      }, 3000); // Message disappears after 3 seconds
+
+      return () => clearTimeout(timer);
+    }
+    if (location.state && location.state.record) {
+      setExistingData(location.state.record);
+    }
+  }, [message, location]);
+
   const validateForm = (formData) => {
     const errors = {};
 
@@ -78,6 +96,7 @@ const IntakePage = () => {
 
     return errors;
   };
+  console.log("Message: ", message)
 
   const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -94,6 +113,7 @@ const IntakePage = () => {
   };
   const handleSubmit = async (formData) => {
     const errors = validateForm(formData);
+    const isEdit = !!existingData;
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
@@ -114,7 +134,7 @@ const IntakePage = () => {
     console.log(JSON.stringify(preparedData));
     try {
       const response = await fetch('http://127.0.0.1:8000/intakeForm', {
-        method: 'POST',
+        method: isEdit ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -122,24 +142,28 @@ const IntakePage = () => {
         body: JSON.stringify(preparedData),
       });
       if (response.ok) {
-        alert('Intake form submitted successfully!');
+        setMessage({ type: 'success', text: 'Intake form submitted successfully!' });
       } else {
-        alert('Failed to submit form. Please try again.');
+        setMessage({ type: 'error', text: 'Failed to submit form. Please try again.' })
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('An error occurred. Please try again.');
+      setMessage({ type: 'error', text: 'An error occurred. Please try again.' });
     }
   };
-
   return (
     <div className="intake-page">
+        <h3 style={{textAlign: 'center'}}>Intake Form</h3>
       <DynamicForm
-        formFields={adoptionFormFields}
         onSubmit={handleSubmit}
-        formTitle="Animal Intake Application"
-        formErrors={formErrors}
+        questions={adoptionFormFields}
+        existingData={existingData}
       />
+      {message && (
+        <div className={`floating-message ${message.type}`}>
+          {message.text}
+        </div>
+      )}
     </div>
   );
 };

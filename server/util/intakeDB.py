@@ -1,6 +1,4 @@
 import psycopg2
-import json
-import os
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import base64
@@ -31,21 +29,21 @@ def createTableEntry(json_data):
     values = (
         json_data["intake_date"],  # intake_date (current timestamp)
         json_data["species"],
-        json_data["breed"] if "breed" in json_data else None,
+        json_data["breed"] if "breed" in json_data else "null",
         json_data["gender"],
         (datetime.now()-relativedelta(years=int(json_data["estimated_age"]))),
         json_data["weight"],
-        json_data["pickup_location"] if "pickup_location" in json_data else None,
-        json_data["pickup_contact_name"] if "pickup_contact_name" in json_data else None,
-        json_data["pickup_contact_phone"] if "pickup_contact_phone" in json_data else None,
-        json_data["assigned_team_member"] if "assigned_team_member" in json_data else None,
+        json_data["pickup_location"] if "pickup_location" in json_data else "null",
+        json_data["pickup_contact_name"] if "pickup_contact_name" in json_data else "null",
+        json_data["pickup_contact_phone"] if "pickup_contact_phone" in json_data else "null",
+        json_data["assigned_team_member"] if "assigned_team_member" in json_data else "null",
         json_data["condition_upon_arrival"],
-        json_data["injuries_or_health_issues"] if "injuries_or_health_issues" in json_data else None,
+        json_data["injuries_or_health_issues"] if "injuries_or_health_issues" in json_data else "null",
         json_data["behavioral_conditions"],
-        json_data["transportation_method"] if "transportation_method" in json_data else None,
-        json_data["transported_by"] if "transported_by" in json_data else None,
+        json_data["transportation_method"] if "transportation_method" in json_data else "null",
+        json_data["transported_by"] if "transported_by" in json_data else "null",
         json_data["adoption_status"] if "adoption_status" in json_data else False,
-        json_data["intake_request_date"] if "intake_request_date" in json_data else None
+        json_data["intake_request_date"] if "intake_request_date" in json_data else "null"
     )
 
     # Insert query with RETURNING clause
@@ -115,24 +113,24 @@ def updateTableEntry(json_data):
     values = (
         json_data["intake_date"],  # intake_date (current timestamp)
         json_data["species"],
-        json_data["breed"] if "breed" in json_data else None,
+        json_data["breed"] if "breed" in json_data else "null",
         json_data["gender"],
         (datetime.now()-relativedelta(years=int(json_data["estimated_age"]))),
         json_data["weight"],
-        json_data["pickup_location"] if "pickup_location" in json_data else None,
-        json_data["pickup_contact_name"] if "pickup_contact_name" in json_data else None,
-        json_data["pickup_contact_phone"] if "pickup_contact_phone" in json_data else None,
-        json_data["assigned_team_member"] if "assigned_team_member" in json_data else None,
+        json_data["pickup_location"] if "pickup_location" in json_data else "null",
+        json_data["pickup_contact_name"] if "pickup_contact_name" in json_data else "null",
+        json_data["pickup_contact_phone"] if "pickup_contact_phone" in json_data else "null",
+        json_data["assigned_team_member"] if "assigned_team_member" in json_data else "null",
         json_data["condition_upon_arrival"],
-        json_data["injuries_or_health_issues"] if "injuries_or_health_issues" in json_data else None,
+        json_data["injuries_or_health_issues"] if "injuries_or_health_issues" in json_data else "null",
         json_data["behavioral_conditions"],
-        json_data["transportation_method"] if "transportation_method" in json_data else None,
-        json_data["transported_by"] if "transported_by" in json_data else None,
+        json_data["transportation_method"] if "transportation_method" in json_data else "null",
+        json_data["transported_by"] if "transported_by" in json_data else "null",
         json_data["adoption_status"] if "adoption_status" in json_data else False,
-        json_data["intake_request_date"] if "intake_request_date" in json_data else None,
+        json_data["intake_request_date"] if "intake_request_date" in json_data else "null",
         json_data["animal_id"]
     )
-
+    animal_id = json_data["animal_id"]
     # Insert query with RETURNING clause
     insert_query = """
     UPDATE public.animal_intake SET
@@ -146,7 +144,6 @@ def updateTableEntry(json_data):
 
     # Execute query with the values and retrieve the inserted animal_id
     cur.execute(insert_query, values)
-    inserted_id = cur.fetchone()[0]  # Fetch the first column of the first row
 
     insert_query_blob = """
     INSERT INTO public.animal_images (
@@ -155,13 +152,15 @@ def updateTableEntry(json_data):
     RETURNING animal_id;
     """
 
-    if "photos_pickup" in json_data:
-        for blob in json_data["photos_pickup"]:
-            cur.execute(insert_query_blob, (inserted_id, blob))
+    if json_data != None and "photos_pickup" in json_data:
+        if json_data["photos_pickup"]:
+            for blob in json_data["photos_pickup"]:
+                cur.execute(insert_query_blob, (animal_id, blob))
 
-    if "photos_arrival" in json_data:
-        for blob in json_data["photos_arrival"]:
-            cur.execute(insert_query_blob, (inserted_id, blob))
+    if json_data != None and "photos_arrival" in json_data:
+        if json_data["photos_pickup"]:
+            for blob in json_data["photos_arrival"]:
+                cur.execute(insert_query_blob, (animal_id, blob))
 
 
     # Commit the transaction
@@ -171,8 +170,6 @@ def updateTableEntry(json_data):
     cur.close()
     conn.close()
 
-    # Print the inserted ID
-    return inserted_id
 
 def getTableEntry(animal_id = None):
     DB_HOST = "autorack.proxy.rlwy.net"
@@ -195,7 +192,7 @@ def getTableEntry(animal_id = None):
     cur = conn.cursor()
 
     if animal_id is None:
-        query = "SELECT animal_id, species, breed, gender from animal_intake"
+        query = "SELECT * from animal_intake"
         cur.execute(query)
         data = cur.fetchall()
         return_data = []
@@ -206,10 +203,23 @@ def getTableEntry(animal_id = None):
             images = [base64.b64encode(blob[0]).decode('ascii') for blob in images]
             return_data.append({
                 "animal_id": d[0],
-                "species": d[1],
-                "breed": d[2],
-                "gender": d[3],
-                "images": images
+                "intake_date": d[1],
+                "species": d[2],
+                "breed": d[3],
+                "gender": d[4],
+                "estimated_age": relativedelta(datetime.today().date(), d[5]).years,
+                "weight": d[6],
+                "pickup_location": d[7],
+                "pickup_contact_name": d[8],
+                "pickup_contact_phone": d[9],
+                "assigned_team_member": d[10],
+                "condition_upon_arrival": d[11],
+                "injuries_or_health_issues": d[12],
+                "behavioral_condition": d[13],
+                "transportation_method": d[14],
+                "transported_by": d[15],
+                "adoption_status": d[16],
+                "intake_request_date": d[17]
             })
         return return_data
 
@@ -220,9 +230,23 @@ def getTableEntry(animal_id = None):
     images = cur.fetchall()
     return {
         "animal_id": d[0],
-        "species": d[1],
-        "breed": d[2],
-        "gender": d[3],
+        "intake_date": d[1],
+        "species": d[2],
+        "breed": d[3],
+        "gender": d[4],
+        "estimated_age": relativedelta(datetime.today().date(), d[5]).years,
+        "weight": d[6],
+        "pickup_location": d[7],
+        "pickup_contact_name": d[8],
+        "pickup_contact_phone": d[9],
+        "assigned_team_member": d[10],
+        "condition_upon_arrival": d[11],
+        "injuries_or_health_issues": d[12],
+        "behavioral_condition": d[13],
+        "transportation_method": d[14],
+        "transported_by": d[15],
+        "adoption_status": d[16],
+        "intake_request_date": d[17],
         "images": images
     }
 
@@ -247,6 +271,7 @@ def deleteTableEntry(animal_id):
     cur = conn.cursor()
 
     cur.execute("DELETE FROM animal_intake WHERE animal_id = %s", (animal_id["animal_id"],))
+    cur.execute("DELETE FROM animal_images WHERE animal_id = %s", (animal_id["animal_id"],))
 
     # Commit the changes
     conn.commit()
