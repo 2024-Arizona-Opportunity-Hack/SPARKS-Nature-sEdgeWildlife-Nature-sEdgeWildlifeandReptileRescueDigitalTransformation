@@ -195,7 +195,6 @@ def getTableEntry(animal_id = None):
         query = "SELECT * from animal_intake"
         cur.execute(query)
         data = cur.fetchall()
-        print(data)
         return_data = []
         for d in data:
             cur.execute("SELECT image_data from animal_images where animal_id=%s", (d[0],))
@@ -220,8 +219,7 @@ def getTableEntry(animal_id = None):
                 "transportation_method": d[14],
                 "transported_by": d[15],
                 "adoption_status": d[16],
-                "intake_request_date": d[17],
-                "images": images
+                "intake_request_date": d[17]
             })
         return return_data
 
