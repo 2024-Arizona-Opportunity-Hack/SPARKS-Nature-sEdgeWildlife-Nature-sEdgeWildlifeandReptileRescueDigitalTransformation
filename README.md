@@ -18,13 +18,19 @@
 - Prathamesh Arun Lakawade (https://github.com/PrathameshLakawade)
 
 ## Project Overview
-Brief description of your project and its goals.
+Our project provides a comprehensive cloud-based donation management system tailored for Nature’s Edge Wildlife and Reptile Rescue. By replacing manual processes with digital solutions, we streamline the tracking of donations, automate the generation of customizable thank-you cards, and manage animal intake and adoption forms efficiently. This all-in-one solution enhances operational efficiency, ensuring that Nature’s Edge can focus more on its mission of wildlife rescue and rehabilitation.
 
-## Tech Stack
-- Frontend: React
-- Backend: FastAPI
-- Database: PostgreSQL
-- APIs: 
+## How we built it
+The backend solution for this donation management system is built using:
+- FastAPI
+- PostgreSQL
+
+The frontend solution for this donation management system is built using:
+- React
+- Bootstrap
+
+The cloud solution for this this donation management system is built using:
+- Railway
 
 
 ## Getting Started
@@ -61,7 +67,10 @@ uvicorn main:app
 4. ✅ Your DevPost final submission demo video should be 4 minutes or less
 5. ✅ Review the judging criteria on DevPost
 
-# What should your final Readme look like?
+## Challenges we ran into
+One significant challenge we encountered was the inability to successfully integrate a donation management system with third-party services such as GiveButter and PayPal Donations. The primary reason for this is that most of these services require details that we are currently unable to provide, such as bank account numbers and license IDs. To address this issue, we have temporarily developed a mock-up to illustrate how the donation transaction process would look.
+
+## What should your final Readme look like?
 Your readme should be a one-stop-shop for the judges to understand your project. It should include:
 - Team name
 - Team members
