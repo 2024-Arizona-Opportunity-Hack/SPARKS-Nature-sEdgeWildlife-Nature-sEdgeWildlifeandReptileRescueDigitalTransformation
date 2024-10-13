@@ -194,7 +194,7 @@ def getTableEntry(animal_id = None):
     # Create a cursor object
     cur = conn.cursor()
 
-    if "animal_id" not in animal_id:
+    if animal_id is None:
         query = "SELECT animal_id, species, breed, gender from animal_intake"
         cur.execute(query)
         data = cur.fetchall()
@@ -213,7 +213,7 @@ def getTableEntry(animal_id = None):
         return return_data
 
     query = "SELECT animal_id, species, breed, gender from animal_intake where animal_id=%s"
-    cur.execute(query, (animal_id["animal_id"],))
+    cur.execute(query, (animal_id,))
     d = cur.fetchone()
     cur.execute("SELECT image_data from animal_images where animal_id=%s", (d[0],))
     images = cur.fetchall()
@@ -225,3 +225,31 @@ def getTableEntry(animal_id = None):
         "images": images
     }
 
+def deleteTableEntry(animal_id):
+    DB_HOST = "autorack.proxy.rlwy.net"
+    DB_NAME = "railway"
+    DB_USER = "postgres"
+    DB_PASSWORD = "dDsUMplJMZOoMPlddDqriJdMLUyyGadU"
+    DB_PORT = 24108
+
+    # Connect to the PostgreSQL database
+    conn = psycopg2.connect(
+        host=DB_HOST,
+        database=DB_NAME,
+        port=DB_PORT,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        sslmode='require'  # Ensure SSL is enabled
+    )
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM animal_intake WHERE animal_id = %s", (animal_id["animal_id"],))
+
+    # Commit the changes
+    conn.commit()
+
+    # Close the cursor and connection
+    cur.close()
+    conn.close()
