@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Request
 from typing import Annotated
 from model.intakeRequest import IntakeRequest
 
 router = APIRouter()
 
 @router.post("/intakeForm")
-def get_burndown_chart_metric(
-        intakeRequest: IntakeRequest
+async def get_burndown_chart_metric(
+        request: Request
 ):
-    print(intakeRequest)
+    abc = await request.body()
+    print(abc)
