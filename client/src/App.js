@@ -10,6 +10,7 @@ import Login from './components/Login';
 import AdminHub from './pages/AdminHub';
 import IntakeManagement from './components/IntakeManagement';
 import FormGenerator from './components/FormGenerator';
+import ProtectedRoute from './ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -30,15 +31,28 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminHub />,
+    element: (
+      <ProtectedRoute>
+        <AdminHub />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/admin/intake",
-        element: <IntakeManagement />    
+        element:
+        (
+          <ProtectedRoute>
+            <IntakeManagement />    
+          </ProtectedRoute>
+        )
       },
       {
         path: "/admin/forms",
-        element: <FormGenerator />,
+        element: (
+          <ProtectedRoute>
+            <FormGenerator />
+          </ProtectedRoute>
+        ),
       }
     ]
   },

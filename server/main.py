@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from controller import adoptionController
 from controller import intakeController
 from controller import loginController
 
 app = FastAPI()
+
+app.include_router(adoptionController.router)
 
 
 app.include_router(loginController.router)
