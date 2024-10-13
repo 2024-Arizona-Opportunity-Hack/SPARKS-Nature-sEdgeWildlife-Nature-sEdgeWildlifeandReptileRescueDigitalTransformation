@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from controller import loginController
 
 app = FastAPI()
+app.include_router(loginController.router)
 
 # Configure CORS
 app.add_middleware(
