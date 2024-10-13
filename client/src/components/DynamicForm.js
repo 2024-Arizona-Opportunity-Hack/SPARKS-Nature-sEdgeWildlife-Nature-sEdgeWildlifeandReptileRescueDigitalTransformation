@@ -5,6 +5,7 @@ const DynamicForm = ({ formFields, onSubmit, formTitle }) => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+  
     
     // If it's a file input and multiple files are allowed
     if (e.target.type === 'file') {
