@@ -132,7 +132,7 @@ def updateTableEntry(json_data):
         json_data["intake_request_date"] if "intake_request_date" in json_data else None,
         json_data["animal_id"]
     )
-
+    animal_id = json_data["animal_id"]
     # Insert query with RETURNING clause
     insert_query = """
     UPDATE public.animal_intake SET
@@ -146,7 +146,6 @@ def updateTableEntry(json_data):
 
     # Execute query with the values and retrieve the inserted animal_id
     cur.execute(insert_query, values)
-    inserted_id = cur.fetchone()[0]  # Fetch the first column of the first row
 
     insert_query_blob = """
     INSERT INTO public.animal_images (
@@ -155,13 +154,15 @@ def updateTableEntry(json_data):
     RETURNING animal_id;
     """
 
-    if "photos_pickup" in json_data:
-        for blob in json_data["photos_pickup"]:
-            cur.execute(insert_query_blob, (inserted_id, blob))
+    if json_data != None and "photos_pickup" in json_data:
+        if json_data["photos_pickup"]:
+            for blob in json_data["photos_pickup"]:
+                cur.execute(insert_query_blob, (animal_id, blob))
 
-    if "photos_arrival" in json_data:
-        for blob in json_data["photos_arrival"]:
-            cur.execute(insert_query_blob, (inserted_id, blob))
+    if json_data != None and "photos_arrival" in json_data:
+        if json_data["photos_pickup"]:
+            for blob in json_data["photos_arrival"]:
+                cur.execute(insert_query_blob, (animal_id, blob))
 
 
     # Commit the transaction
@@ -171,8 +172,6 @@ def updateTableEntry(json_data):
     cur.close()
     conn.close()
 
-    # Print the inserted ID
-    return inserted_id
 
 def getTableEntry(animal_id = None):
     DB_HOST = "autorack.proxy.rlwy.net"
