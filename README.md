@@ -59,7 +59,7 @@ This will start the React frontend on localhost:3000.
 In a new terminal window, navigate to the server directory, install the necessary Python dependencies, and start the backend:
 ```bash
 cd server
-pip install requirements.txt
+pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 This will start the FastAPI backend on localhost:8000.
