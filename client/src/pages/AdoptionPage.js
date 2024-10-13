@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import AnimalList from '../components/AnimalList';
-import AdoptionFormPopup from '../components/AdoptionFormPopup';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import AnimalList from '../components/AnimalList'
+import AdoptionFormPopup from '../components/AdoptionFormPopup'
+import axios from 'axios'
 import dummyAnimals from './DummyAnimals'
-import RescueFilter from '../components/RescueFilter';
+
 
 const AdoptionPage = () => {
   const [animals, setAnimals] = useState([]);
@@ -27,22 +27,8 @@ const AdoptionPage = () => {
     fetchAnimals();
   }, []); */
   useEffect(() => {
-    const fetchAnimals = async () => {
-      setIsLoading(true);
-      try {
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-        setAnimals(dummyAnimals);
-        setFilteredAnimals(dummyAnimals);
-        setError(null);
-      } catch (err) {
-        setError('Failed to fetch animals. Please try again later.');
-        console.error('Error fetching animals:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAnimals();
+    setAnimals(dummyAnimals);
+    setIsLoading(false)
   }, []);
 
   const handleAdopt = (animal) => {
@@ -90,14 +76,13 @@ const AdoptionPage = () => {
   return (
     <div className="adoptionPage">
       <h1>Rescue Animals for Adoption</h1>
-      <RescueFilter animals={animals} onFilterChange={handleFilterChange} />
+      {/* <RescueFilter animals={animals} onFilterChange={handleFilterChange} /> */}
       <AnimalList animals={animals} onAdopt={handleAdopt} />
       {selectedAnimal && (
         <AdoptionFormPopup
           isOpen={isPopupOpen}
           onClose={closePopup}
           animal={selectedAnimal}
-          formId="adoption-form-id" // Replace with your actual form ID
         />
       )}
     </div>
