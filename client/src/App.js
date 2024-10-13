@@ -15,7 +15,7 @@ import ProtectedRoute from './ProtectedRoute';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <IntakeManagement />,
   },
   {
     path: "/adopt",
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/intake",
-    element: <IntakePage />,
+    element: <IntakeManagement />,
   },
   {
     path: "/login",
