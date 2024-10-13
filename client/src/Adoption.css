@@ -84,6 +84,7 @@
     max-height: 80vh;
     overflow-y: auto;
     position: relative;
+    text-align: center;
   }
   
   .closeButton {
@@ -129,4 +130,11 @@
     padding: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;
+  }
+  .animal-thumbnail {
+    width: 100px; /* Adjust width as needed */
+    height: 100px; /* Same as width for square shape */
+    border-radius: 8px; /* Slightly rounded corners */
+    margin-bottom: 15px; /* Spacing between photo and name */
+    object-fit: cover; /* Ensures image fills the square without stretching */
   }

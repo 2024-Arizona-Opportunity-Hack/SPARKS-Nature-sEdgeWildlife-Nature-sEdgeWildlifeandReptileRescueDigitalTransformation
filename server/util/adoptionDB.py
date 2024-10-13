@@ -1,0 +1,77 @@
+import psycopg2
+import json
+import os
+from datetime import datetime
+#from dateutil.relativedelta import relativedelta
+
+
+
+
+def createAdoptionTableEntry(json_data):
+    # Connection details
+    DB_HOST = "autorack.proxy.rlwy.net"
+    DB_NAME = "railway"
+    DB_USER = "postgres"
+    DB_PASSWORD = "dDsUMplJMZOoMPlddDqriJdMLUyyGadU"
+    DB_PORT = 24108
+
+    # Connect to the PostgreSQL database
+    conn = psycopg2.connect(
+        host=DB_HOST,
+        database=DB_NAME,
+        port=DB_PORT,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        sslmode='require'  # Ensure SSL is enabled
+    )
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    # Flatten any nested dictionaries or convert complex types to strings
+    values = (
+        str(json_data.get("full_name")),  # Convert to string if needed
+        str(json_data.get("contact_address")),
+        str(json_data.get("contact_phone")),
+        str(json_data.get("contact_email")),
+        str(json_data.get("facility_type")),
+        str(json_data.get("facility_license")),
+        str(json_data.get("license_number")),
+        str(json_data.get("experience_with_species")),
+        str(json_data.get("reason_for_adoption")),
+        str(json_data.get("animal_id")),
+        str(json_data.get("government_id"))
+    )
+
+# Flatten any nested dictionaries or convert complex types to strings
+
+
+
+    # Insert query with RETURNING clause
+    insert_query = """
+    INSERT INTO public.adoption_requests (
+	 full_name, contact_address, contact_phone, contact_email, facility_type,
+	facility_license, license_number, experience_with_species, reason_for_adoption, animal_id, government_id)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    RETURNING request_id;
+    """
+
+    # Execute query with the values and retrieve the inserted animal_id
+    cur.execute(insert_query, values)
+    inserted_id = cur.fetchone()[0]  # Fetch the first column of the first row
+
+
+
+    
+    # Commit the transaction
+    conn.commit()
+
+    # Close the cursor and connection
+    cur.close()
+    conn.close()
+
+    # Print the inserted ID
+    return inserted_id
+
+
+
