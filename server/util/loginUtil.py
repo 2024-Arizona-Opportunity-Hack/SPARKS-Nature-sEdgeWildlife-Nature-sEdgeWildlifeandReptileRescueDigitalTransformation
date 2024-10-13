@@ -35,9 +35,6 @@ def loginSuccessful(json_data):
     cur.execute("SELECT emp.name, emp.email, emp.employee_type FROM employee_login emp_l inner join employees as emp on emp_l.employee_id = emp.employee_id WHERE emp_l.email=%s and emp_l.password_hash=%s",
                        data)
 
-    cur.execute("SELECT emp.name, emp.email, emp.employee_type FROM employee_login emp_l INNER JOIN employees AS emp ON emp_l.employee_id = emp.employee_id WHERE emp_l.email=%s AND emp_l.password_hash=%s",
-                data)
-
     # Fetch the result
     result = cur.fetchone()
 
