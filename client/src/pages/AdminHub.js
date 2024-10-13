@@ -39,7 +39,7 @@ const AdminHub = () => {
                   isActive ? 'active-link' : undefined
                 }
               >
-                View Current Intake
+                View Rescues in Reserve
               </NavLink>
             </li>
             <li>
@@ -54,7 +54,7 @@ const AdminHub = () => {
             </li>
             <li>
               <NavLink 
-                to="/admin/adoption"
+                to="/admin/adopt-req"
                 className={({ isActive }) => 
                   isActive ? 'active-link' : undefined
                 }

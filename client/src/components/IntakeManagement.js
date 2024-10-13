@@ -223,6 +223,23 @@ const EditPopupForm = ({ isOpen, onClose, recordData, onSave, onSuccessfulUpdate
   );
 };
 
+const ConfirmationPopup = ({ isOpen, onClose, onConfirm, message }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <h2>Confirm Action</h2>
+        <p>{message}</p>
+        <div className="form-actions">
+          <button className='delete-btn'onClick={onConfirm}>Yes, Delete</button>
+          <button className='download-btn' onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 const IntakeManagement = () => {
   const [intakeRecords, setIntakeRecords] = useState([]);
@@ -232,6 +249,8 @@ const IntakeManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [message, setMessage] = useState(null);
   const navigate = useNavigate()
   useEffect(() => {
     fetchIntakeRecords();
@@ -255,6 +274,35 @@ const IntakeManagement = () => {
       setLoading(false)
     }
   };
+  const handleDeleteClick = (record) => {
+    setSelectedRecord(record);
+    setIsDeleteConfirmOpen(true);
+  };
+  const handleDeleteConfirm = async () => {
+    setIsDeleteConfirmOpen(false)
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/intakeForm`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ animal_id: selectedRecord.animal_id }),
+      });
+
+      if (response.ok) {
+        setMessage({ text: 'Record deleted successfully!', type: 'success' });
+        await fetchIntakeRecords(); // Refresh the records after successful deletion
+      } else {
+        setMessage({ text: 'Failed to delete record. Please try again.', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      setMessage({ text: 'An error occurred while deleting. Please try again.', type: 'error' });
+    } finally {
+      setIsDeleteConfirmOpen(false);
+      setSelectedRecord(null);
+    }
+  };
   const handleEditClick = (record) => {
     console.log("record: ", record)
     setSelectedRecord(record);
@@ -276,6 +324,9 @@ const IntakeManagement = () => {
     
     return matchesSearch && matchesFilter && matchesDate;
   })
+  const handleCloseMessage = useCallback(() => {
+    setMessage(null);
+  }, []);
   return (
     <div className="intake-management">
   <h2>Intake Records</h2>
@@ -339,8 +390,9 @@ const IntakeManagement = () => {
             <tr>
               <th>Species</th>
               <th>Breed</th>
+              <th>Estimated Age</th>
               <th>Gender</th>
-              <th>Actions</th>
+              <th style={{textAlign: 'center'}}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -348,12 +400,14 @@ const IntakeManagement = () => {
               <tr key={record.id}>
                 <td>{record.species}</td>
                 <td>{record.breed}</td>
+                <td style={{textAlign: 'center'}}>{record.estimated_age}</td>
                 <td>{record.gender}</td>
                 <td>
                   <div className="action-buttons">
                     <button className="share-btn">📤Share</button>
                     <button className="download-btn">📥Download</button>
                     <button className="edit-btn" onClick={() => handleEditClick(record)}>📝Edit</button>
+                    <button className="delete-btn" onClick={() => handleDeleteClick(record)}>🗑️Delete</button>
                   </div>
                 </td>
               </tr>
@@ -372,6 +426,19 @@ const IntakeManagement = () => {
           onSave={handleSave}
           onSuccessfulUpdate={handleSuccessfulUpdate}
           
+        />
+      )}
+      <ConfirmationPopup
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        message="Are you sure you want to delete this record? This action cannot be undone."
+      />
+      {message && (
+        <MessageBox 
+          message={message.text} 
+          type={message.type} 
+          onClose={handleCloseMessage} 
         />
       )}
   </div>

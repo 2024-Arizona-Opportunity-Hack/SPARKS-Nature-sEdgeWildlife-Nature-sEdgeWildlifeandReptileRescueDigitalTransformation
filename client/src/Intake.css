@@ -183,3 +183,15 @@
     height: 4px;
     background-color: rgba(255, 255, 255, 0.7);
   }
+
+  .delete-btn {
+    background-color: #962727;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .delete-btn:hover {
+    background-color: #751d1d;
+  }

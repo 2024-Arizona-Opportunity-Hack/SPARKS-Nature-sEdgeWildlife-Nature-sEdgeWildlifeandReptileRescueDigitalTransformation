@@ -12,6 +12,7 @@ import IntakeManagement from './components/IntakeManagement';
 import FormGenerator from './components/FormGenerator';
 import ProtectedRoute from './ProtectedRoute';
 import Dashboard from './components/Dashboard';
+import AdoptionRequests from './components/AdoptionRequests';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <IntakePage />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "/admin/adopt-req",
+        element: (
+          <ProtectedRoute>
+            <AdoptionRequests />
           </ProtectedRoute>
         )
       }

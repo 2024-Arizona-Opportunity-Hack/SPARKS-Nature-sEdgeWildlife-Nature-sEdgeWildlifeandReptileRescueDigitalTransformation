@@ -162,6 +162,7 @@ def getAdoptionEntries(request_id: str=None):
         query = "SELECT * from adoption_requests"
         cur.execute(query)
         data = cur.fetchall()
+        print(data)
         return_data = []
         for d in data:
             return_data.append({
@@ -171,14 +172,12 @@ def getAdoptionEntries(request_id: str=None):
                 "contact_phone": d[3],
                 "contact_email": d[4],
                 "facility_type": d[5],
-                "facility_license": d[6],
                 "license_number": d[7],
                 "experience_with_species": d[8],
                 "reason_for_adoption": d[9],
                 "animal_id": d[10],
                 "application_status": d[11],
-                "submission_date": d[12],
-                "government_id": d[13]
+                "submission_date": d[12]
             })
         return return_data
 
