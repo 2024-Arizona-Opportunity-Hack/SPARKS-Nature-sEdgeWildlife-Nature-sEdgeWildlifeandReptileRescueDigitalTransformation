@@ -202,7 +202,8 @@ def getTableEntry(animal_id = None):
         for d in data:
             cur.execute("SELECT image_data from animal_images where animal_id=%s", (d[0],))
             images = cur.fetchall()
-            images = [base64.b64encode(blob[0]).decode("utf-8") for blob in images]
+            # images = [base64.b64encode(blob[0]).decode("utf-8") for blob in images]
+            images = [base64.b64encode(blob[0]).decode('ascii') for blob in images]
             return_data.append({
                 "animal_id": d[0],
                 "species": d[1],
