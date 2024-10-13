@@ -232,8 +232,8 @@ const ConfirmationPopup = ({ isOpen, onClose, onConfirm, message }) => {
         <h2>Confirm Action</h2>
         <p>{message}</p>
         <div className="form-actions">
-          <button onClick={onConfirm}>Yes, Delete</button>
-          <button onClick={onClose}>Cancel</button>
+          <button className='delete-btn'onClick={onConfirm}>Yes, Delete</button>
+          <button className='download-btn' onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>
@@ -279,6 +279,7 @@ const IntakeManagement = () => {
     setIsDeleteConfirmOpen(true);
   };
   const handleDeleteConfirm = async () => {
+    setIsDeleteConfirmOpen(false)
     try {
       const response = await fetch(`http://127.0.0.1:8000/intakeForm`, {
         method: 'DELETE',
