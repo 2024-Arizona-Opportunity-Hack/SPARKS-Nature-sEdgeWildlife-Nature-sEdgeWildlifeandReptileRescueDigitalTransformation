@@ -7,6 +7,9 @@ import AdoptionPage from './pages/AdoptionPage'
 import IntakePage from './pages/IntakePage';
 import HomePage from './pages/HomePage';
 import Login from './components/Login';
+import AdminHub from './pages/AdminHub';
+import IntakeManagement from './components/IntakeManagement';
+import FormGenerator from './components/FormGenerator';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +27,20 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/admin",
+    element: <AdminHub />,
+    children: [
+      {
+        path: "/admin/intake",
+        element: <IntakeManagement />    
+      },
+      {
+        path: "/admin/forms",
+        element: <FormGenerator />,
+      }
+    ]
   },
 ]);
 
