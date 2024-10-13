@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 
-def createTableEntry(json_data):
+def createAdoptionTableEntry(json_data):
     # Connection details
     DB_HOST = "autorack.proxy.rlwy.net"
     DB_NAME = "railway"
