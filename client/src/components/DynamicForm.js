@@ -1,35 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import '../Form.css'
 
-const DynamicForm = ({ formId, onSubmit }) => {
-  const [formFields, setFormFields] = useState([]);
+const DynamicForm = ({ onSubmit, questions, onClose }) => {
   const [formData, setFormData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchFormFields = async () => {
-      setIsLoading(true);
-      try {
-        // In a real application, you would fetch the form fields from your backend using the formId
-        // For this example, we'll use a dummy form structure
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
-        const dummyFormFields = [
-          { name: 'fullName', label: 'Full Name', type: 'text', required: true },
-          { name: 'email', label: 'Email', type: 'email', required: true },
-          { name: 'phone', label: 'Phone Number', type: 'tel', required: true },
-          { name: 'reason', label: 'Reason for Adoption', type: 'textarea', required: true },
-        ];
-        setFormFields(dummyFormFields);
-      } catch (err) {
-        setError('Failed to load form. Please try again later.');
-        console.error('Error fetching form fields:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFormFields();
-  }, [formId]);
 
   const handleChange = (e) => {
     setFormData({
@@ -40,20 +14,25 @@ const DynamicForm = ({ formId, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const submitData = new FormData()
+    formData.forEach(field => {
+      // For file inputs, handle the file object
+      if (field.type === 'file') {
+        submitData.append(field.name, e.target[field.name].files[0]); // first file in FileList
+      } else {
+        submitData.append(field.name, e.target[field.name].value);
+      }
+    });
+    console.log(formData)
     onSubmit(formData);
   };
-
-  if (isLoading) {
-    return <div>Loading form...</div>;
-  }
-
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      {formFields.map((field) => (
+      {questions.map((field) => (
         <div key={field.name} className="form-field">
           <label htmlFor={field.name}>{field.label}</label>
           {field.type === 'textarea' ? (

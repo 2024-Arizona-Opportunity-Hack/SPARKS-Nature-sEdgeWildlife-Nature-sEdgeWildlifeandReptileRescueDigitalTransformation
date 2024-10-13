@@ -26,6 +26,7 @@ const AdoptionPage = () => {
 
     fetchAnimals();
   }, []); */
+  
   useEffect(() => {
     const fetchAnimals = async () => {
       setIsLoading(true);
@@ -97,7 +98,6 @@ const AdoptionPage = () => {
           isOpen={isPopupOpen}
           onClose={closePopup}
           animal={selectedAnimal}
-          formId="adoption-form-id" // Replace with your actual form ID
         />
       )}
     </div>
