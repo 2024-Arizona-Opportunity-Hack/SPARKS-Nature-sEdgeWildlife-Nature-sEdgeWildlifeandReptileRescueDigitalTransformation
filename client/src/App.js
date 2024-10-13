@@ -18,11 +18,15 @@ import UserManagement from './components/UserManagement';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <IntakeManagement />,
   },
   {
     path: "/adopt",
     element: <AdoptionPage />,
+  },
+  {
+    path: "/intake",
+    element: <IntakeManagement />,
   },
   {
     path: "/login",
