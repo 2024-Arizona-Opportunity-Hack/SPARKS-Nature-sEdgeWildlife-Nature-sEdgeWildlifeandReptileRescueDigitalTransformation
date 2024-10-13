@@ -6,29 +6,48 @@ const DynamicForm = ({ onSubmit, questions, onClose }) => {
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]: files[0] 
+      }));
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]: value
+      }));
+    }
+  };
+  const fileToBlob = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const blob = new Blob([reader.result], { type: file.type });
+        resolve(blob);
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
     });
   };
+  
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const submitData = new FormData()
-    formData.forEach(field => {
-      // For file inputs, handle the file object
-      if (field.type === 'file') {
-        submitData.append(field.name, e.target[field.name].files[0]); // first file in FileList
-      } else {
-        submitData.append(field.name, e.target[field.name].value);
+    const processedFormData = { ...formData };
+    for (const field of questions) {
+      if (field.type === 'file' && formData[field.name]) {
+        try {
+          const fileBlob = await fileToBlob(formData[field.name]);
+          processedFormData[field.name] = fileBlob;
+        } catch (error) {
+          console.error(`Error processing file for ${field.name}:`, error);
+        }
       }
-    });
-    console.log(formData)
-    onSubmit(formData);
+    }
+    console.dir(processedFormData)
+    onSubmit(processedFormData);
   };
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <form onSubmit={handleSubmit}>

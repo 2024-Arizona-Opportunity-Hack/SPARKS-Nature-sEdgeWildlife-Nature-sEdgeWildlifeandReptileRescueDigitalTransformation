@@ -17,7 +17,7 @@ const AdoptionFormPopup = ({ isOpen, onClose, animal }) => {
     { name: 'reason_for_adoption', label: 'Reason For Adoption', type: 'text', required: true },
     { name: 'animal_id', label: 'Animal ID', type: 'number', required: true },
     { name: 'government_id', label: 'Government ID', type: 'file', required: true },
-    ...(animal.exotic === "true" ? [{ name: 'special_requirements', label: 'Exotic Animal License', type: 'text', required: true }] : []),
+    ...(animal.exotic === "true" ? [{ name: 'special_requirements', label: 'Exotic Animal License', type: 'file', required: true }] : []),
   ]
 
   const handleSubmit = (formData) => {
