@@ -11,8 +11,12 @@ function Dashboard (){
     return (
         <div>
             <h1>Welcome, {user.name}.</h1>
+            {user.type === 'Volunteer' && <span className='pill'>{user.type}</span>}
+            {user.type === 'Admin' && <span className='pill admin'>{user.type}</span>}
             <h3>Quick Actions</h3>
-            <button className='btn' onClick={handleClick}>➕Add New Intake</button>
+            <button className='btn' onClick={handleClick}>Add New Intake</button>
+            {user.type === 'Admin' && <button className='btn' onClick={handleClick}>Add New User</button>}
+
         </div>
       );
 }

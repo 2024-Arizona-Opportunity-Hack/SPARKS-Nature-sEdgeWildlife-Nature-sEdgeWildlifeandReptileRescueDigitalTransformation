@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../Intake.css'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
+import jsPDF from 'jspdf';
 
 const formFields = [
   { 
@@ -252,6 +254,8 @@ const IntakeManagement = () => {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate()
+  const { user} = useAuth()
+
   useEffect(() => {
     fetchIntakeRecords();
   }, []);
@@ -327,6 +331,44 @@ const IntakeManagement = () => {
   const handleCloseMessage = useCallback(() => {
     setMessage(null);
   }, []);
+
+  const handleDownload = (listing) => {
+    const doc = new jsPDF();
+    let yPos = 20;
+
+    doc.setFontSize(20);
+    doc.text('Rescue Form', 20, yPos);
+    yPos += 10;
+
+    doc.setFontSize(12);
+    const addField = (label, value) => {
+      yPos += 10;
+      doc.text(`${label}: ${value}`, 20, yPos);
+    };
+
+    addField('Animal ID', listing.animal_id);
+addField('Intake Date', new Date(listing.intake_date).toLocaleString());
+addField('Species', listing.species);
+addField('Breed', listing.breed);
+addField('Gender', listing.gender);
+addField('Estimated Age', listing.estimated_age);
+addField('Weight', listing.weight + ' kg');  // Adding units for clarity
+addField('Pickup Location', listing.pickup_location);
+addField('Pickup Contact Name', listing.pickup_contact_name);
+addField('Pickup Contact Phone', listing.pickup_contact_phone);
+addField('Assigned Team Member', listing.assigned_team_member);
+addField('Condition Upon Arrival', listing.condition_upon_arrival);
+addField('Injuries or Health Issues', listing.injuries_or_health_issues);
+addField('Behavioral Condition', listing.behavioral_condition);
+addField('Transportation Method', listing.transportation_method);
+addField('Transported By', listing.transported_by);
+addField('Adoption Status', listing.adoption_status);
+addField('Intake Request Date', new Date(listing.intake_request_date).toLocaleString());
+
+
+    doc.save(`rescue_form_${listing.request_id}.pdf`);
+  };
+
   return (
     <div className="intake-management">
   <h2>Intake Records</h2>
@@ -405,9 +447,13 @@ const IntakeManagement = () => {
                 <td>
                   <div className="action-buttons">
                     <button className="share-btn">📤Share</button>
-                    <button className="download-btn">📥Download</button>
-                    <button className="edit-btn" onClick={() => handleEditClick(record)}>📝Edit</button>
-                    <button className="delete-btn" onClick={() => handleDeleteClick(record)}>🗑️Delete</button>
+                    <button className="download-btn" onClick={handleDownload}>📥Download</button>
+                    {user.type === "Admin" && (
+                      <div>
+                      <button className="edit-btn" onClick={() => handleEditClick(record)}>📝Edit</button>
+                      <button className="delete-btn" onClick={() => handleDeleteClick(record)}>🗑️Delete</button>
+                      </div>
+                    )}
                   </div>
                 </td>
               </tr>

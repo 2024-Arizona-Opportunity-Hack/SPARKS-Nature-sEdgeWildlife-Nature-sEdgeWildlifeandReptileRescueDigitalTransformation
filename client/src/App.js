@@ -13,6 +13,7 @@ import FormGenerator from './components/FormGenerator';
 import ProtectedRoute from './ProtectedRoute';
 import Dashboard from './components/Dashboard';
 import AdoptionRequests from './components/AdoptionRequests';
+import UserManagement from './components/UserManagement';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <AdoptionRequests />
+          </ProtectedRoute>
+        )
+      }, 
+      {
+        path: "/admin/users",
+        element: (
+          <ProtectedRoute>
+            <UserManagement />
           </ProtectedRoute>
         )
       }

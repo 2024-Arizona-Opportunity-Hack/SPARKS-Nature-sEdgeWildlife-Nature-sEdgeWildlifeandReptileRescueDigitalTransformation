@@ -8,8 +8,23 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 1em;
   }
 
   .btn:hover {
     background-color: #45a049;
   }
+
+  .pill {
+    background-color: #007bff; /* Blue color */
+    color: white;              /* White text color for contrast */
+    padding: 5px 15px;         /* Add padding for pill shape */
+    border-radius: 999px;      /* Rounds it into a pill shape */
+    font-size: 14px;           /* Adjust font size as needed */
+    display: inline-block;     /* Ensures it fits the content */
+}
+
+.admin {
+  background-color: #4CAF60;
+}
+

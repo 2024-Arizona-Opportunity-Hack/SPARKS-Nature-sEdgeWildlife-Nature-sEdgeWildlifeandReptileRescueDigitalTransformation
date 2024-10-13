@@ -1,15 +1,15 @@
 import {  Outlet, NavLink, Navigate, useLocation } from 'react-router-dom';
-import {useAuth} from '../AuthContext'
+import { useAuth } from '../AuthContext';
 import '../Admin.css'
 
 
 const AdminHub = () => {
   const location = useLocation();
-  const { logout} = useAuth
+  const { user, logout} = useAuth()
   console.log("logout: ", logout)
   const handleLogout = (event) => {
     event.preventDefault();
-    logout(); // Ensure logout is clearing state and localStorage
+    logout(); 
   };
 
   return (
@@ -63,15 +63,31 @@ const AdminHub = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink 
-                to="/admin/donations"
-                className={({ isActive }) => 
-                  isActive ? 'active-link' : undefined
-                }
-              >
-                Manage Donations
-              </NavLink>
-            </li>
+                <NavLink 
+                  to="/admin/users"
+                  className={({ isActive }) => 
+                    isActive ? 'active-link' : undefined
+                  }
+                >
+                  Manage Users
+                </NavLink>
+              </li>
+            {user.type === 'Admin' && (<div>
+              
+              <li>
+                <NavLink 
+                  to="/admin/donations"
+                  className={({ isActive }) => 
+                    isActive ? 'active-link' : undefined
+                  }
+                >
+                  Manage Donations
+                </NavLink>
+              </li>
+              </div>
+            )
+            }
+            
             <li>
             <a href="#" onClick={handleLogout}>Log Out</a>
             </li>
