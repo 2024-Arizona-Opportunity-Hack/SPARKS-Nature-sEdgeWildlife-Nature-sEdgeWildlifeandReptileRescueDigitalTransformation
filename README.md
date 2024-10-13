@@ -11,31 +11,46 @@
 @Sakshi Bajaj (on Slack)
 
 ## Team "SPARKS"
-- [Team Member 1](GitHub profile link)
-- [Team Member 2](GitHub profile link)
-- [Team Member 3](GitHub profile link)
-<!-- Add all team members -->
+- Shikha Verma (https://github.com/sverma89asu)
+- Sakshi Bajaj (https://github.com/skshbjj)
+- Kushagra Kartik(https://github.com/Kushagra1480)
+- Aaditya Bhilegaonkar (https://github.com/Aaditya-git)
+- Prathamesh Arun Lakawade (https://github.com/PrathameshLakawade)
 
 ## Project Overview
 Brief description of your project and its goals.
 
 ## Tech Stack
-- Frontend: 
-- Backend: 
-- Database: 
+- Frontend: React
+- Backend: FastAPI
+- Database: PostgreSQL
 - APIs: 
-<!-- Add/modify as needed -->
 
 
 ## Getting Started
 Instructions on how to set up and run your project locally.
 
 ```bash
-# Example commands
-git clone [your-repo-link]
-cd [your-repo-name]
+
+git clone https://github.com/2024-Arizona-Opportunity-Hack/SPARKS-Nature-sEdgeWildlife-Nature-sEdgeWildlifeandReptileRescueDigitalTransformation.git
+cd SPARKS-Nature-sEdgeWildlife-Nature-sEdgeWildlifeandReptileRescueDigitalTransformation/
+```
+
+Install Node https://nodejs.org/en/download/package-manager
+
+```bash
+
+cd client
 npm install
 npm start
+```
+
+In a new terminal
+
+```bash
+cd server
+pip install requirements.txt
+uvicorn main:app
 ```
 
 
