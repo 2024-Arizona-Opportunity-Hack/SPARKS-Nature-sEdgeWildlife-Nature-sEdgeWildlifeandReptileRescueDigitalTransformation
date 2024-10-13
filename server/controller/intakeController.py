@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header
 from typing import Annotated
-from ..model.intakeRequest import IntakeRequest
+from model.intakeRequest import IntakeRequest
 
 router = APIRouter()
 
