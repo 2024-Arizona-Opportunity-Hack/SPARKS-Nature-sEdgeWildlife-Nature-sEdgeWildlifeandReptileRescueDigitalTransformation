@@ -100,7 +100,7 @@ const MessageBox = ({ message, type, onClose }) => {
 };
 
 
-const EditPopupForm = ({ isOpen, onClose, recordData, onSave }) => {
+const EditPopupForm = ({ isOpen, onClose, recordData, onSave, onSuccessfulUpdate }) => {
   const [message, setMessage] = useState(null);
 
   const [formData, setFormData] = useState(recordData);
@@ -110,12 +110,17 @@ const EditPopupForm = ({ isOpen, onClose, recordData, onSave }) => {
     if (recordData) {
       const initialFormData = formFields.reduce((acc, field) => {
         if (field.type === 'file') {
-          acc[field.name] = null; // Initialize file inputs as null
+          acc[field.name] = null;
+        } else if (field.type === 'checkbox') {
+          acc[field.name] = recordData[field.name] || false;
+        } else if (field.type === 'select') {
+          acc[field.name] = recordData[field.name] || field.options[0];
         } else {
           acc[field.name] = recordData[field.name] || '';
         }
         return acc;
       }, {});
+      initialFormData.animal_id = recordData.id;
       setFormData(initialFormData);
     }
   }, [recordData]);
@@ -143,6 +148,7 @@ const EditPopupForm = ({ isOpen, onClose, recordData, onSave }) => {
       });
       if (response.ok) {
         onSave(formData);
+        onSuccessfulUpdate()
         setMessage({ text: 'Record updated successfully!', type: 'success' });
       } else {
         setMessage({ text: 'Failed to update record. Please try again.', type: 'error' });
@@ -152,7 +158,6 @@ const EditPopupForm = ({ isOpen, onClose, recordData, onSave }) => {
       setMessage({ text: 'An error occurred. Please try again.', type: 'error' });
       console.error('Error updating record:', error);
     }
-    onClose()
   };
 
   if (!isOpen) return null;
@@ -232,6 +237,10 @@ const IntakeManagement = () => {
     fetchIntakeRecords();
   }, []);
 
+  const handleSuccessfulUpdate = () => {
+    fetchIntakeRecords(); // Refresh the records after successful update
+  };
+
   const fetchIntakeRecords = async () => {
     setLoading(true)
     try {
@@ -282,6 +291,41 @@ const IntakeManagement = () => {
       <option value="">All Species</option>
       <option value="Dog">Dog</option>
       <option value="Cat">Cat</option>
+      <option value="Dog">Dog</option>
+  <option value="Cat">Cat</option>
+  <option value="Rabbit">Rabbit</option>
+  <option value="Parrot">Parrot</option>
+  <option value="Pigeon">Pigeon</option>
+  <option value="Sparrow">Sparrow</option>
+  <option value="Canary">Canary</option>
+  <option value="Snake">Snake</option>
+  <option value="Lizard">Lizard</option>
+  <option value="Turtle/Tortoise">Turtle/Tortoise</option>
+  <option value="Hamster">Hamster</option>
+  <option value="Guinea Pig">Guinea Pig</option>
+  <option value="Rat">Rat</option>
+  <option value="Mouse">Mouse</option>
+  <option value="Horse">Horse</option>
+  <option value="Cow">Cow</option>
+  <option value="Pig">Pig</option>
+  <option value="Sheep">Sheep</option>
+  <option value="Goat">Goat</option>
+  <option value="Chicken">Chicken</option>
+  <option value="Duck">Duck</option>
+  <option value="Freshwater Fish">Freshwater Fish</option>
+  <option value="Saltwater Fish">Saltwater Fish</option>
+  <option value="Fox">Fox</option>
+  <option value="Squirrel">Squirrel</option>
+  <option value="Deer">Deer</option>
+  <option value="Raccoon">Raccoon</option>
+  <option value="Ferret">Ferret</option>
+  <option value="Hedgehog">Hedgehog</option>
+  <option value="Sugar Glider">Sugar Glider</option>
+  <option value="Frog">Frog</option>
+  <option value="Salamander">Salamander</option>
+  <option value="Butterfly">Butterfly</option>
+  <option value="Beetle">Beetle</option>
+  <option value="Other">Other</option>
       {/* Add other species as needed */}
     </select>
   </div>
@@ -326,6 +370,8 @@ const IntakeManagement = () => {
           }}
           recordData={selectedRecord}
           onSave={handleSave}
+          onSuccessfulUpdate={handleSuccessfulUpdate}
+          
         />
       )}
   </div>
