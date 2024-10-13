@@ -20,11 +20,27 @@ const AdoptionFormPopup = ({ isOpen, onClose, animal }) => {
     ...(animal.exotic === "true" ? [{ name: 'special_requirements', label: 'Exotic Animal License', type: 'file', required: true }] : []),
   ]
 
-  const handleSubmit = (formData) => {
-    console.log('Adoption form submitted:', formData);
-    // Here you would typically send this data to your backend
-    onClose();
-  };
+  const handleSubmit = async(formData) => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/adoptionForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        const result = await response.json()
+        alert('Intake form submitted successfully!');
+      } else {
+        alert('Failed to submit form. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
+    onClose();
+  };
 
   return (
     <div className="popupOverlay">

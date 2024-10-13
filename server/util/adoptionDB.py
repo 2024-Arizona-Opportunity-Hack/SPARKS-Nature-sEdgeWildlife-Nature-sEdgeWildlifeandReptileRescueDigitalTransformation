@@ -28,24 +28,28 @@ def createAdoptionTableEntry(json_data):
     # Create a cursor object
     cur = conn.cursor()
 
-    # Prepare values tuple
+    # Flatten any nested dictionaries or convert complex types to strings
     values = (
-        json_data["full_name"],  # intake_date (current timestamp)
-        json_data["contact_address"],
-        json_data["contact_phone"],
-        json_data["contact_email"],
-        json_data["facility_type"],
-        json_data["facility_license"],
-        json_data["license_number"],
-        json_data["experience_with_species"],
-        json_data["reason_for_adoption"],
-        json_data["animal_id"],
-        json_data["government_id"]
+        str(json_data.get("full_name")),  # Convert to string if needed
+        str(json_data.get("contact_address")),
+        str(json_data.get("contact_phone")),
+        str(json_data.get("contact_email")),
+        str(json_data.get("facility_type")),
+        str(json_data.get("facility_license")),
+        str(json_data.get("license_number")),
+        str(json_data.get("experience_with_species")),
+        str(json_data.get("reason_for_adoption")),
+        str(json_data.get("animal_id")),
+        str(json_data.get("government_id"))
     )
+
+# Flatten any nested dictionaries or convert complex types to strings
+
+
 
     # Insert query with RETURNING clause
     insert_query = """
-    INSERT INTO public.adoption_requests(
+    INSERT INTO public.adoption_requests (
 	 full_name, contact_address, contact_phone, contact_email, facility_type,
 	facility_license, license_number, experience_with_species, reason_for_adoption, animal_id, government_id)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)

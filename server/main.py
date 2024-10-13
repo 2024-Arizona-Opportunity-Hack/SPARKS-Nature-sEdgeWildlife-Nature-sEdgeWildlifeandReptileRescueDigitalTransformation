@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from controller import adoptionController
 
 app = FastAPI()
+
+app.include_router(adoptionController.router)
 
 # Configure CORS
 app.add_middleware(
